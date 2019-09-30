@@ -13,7 +13,7 @@ public class Map {
 	public String toString() {
 		for(int i = 0; i < this.lengthMap; i++) {
 			for (int j = 0; j < this.widthMap; i++) {
-				System.out.print("*");
+				System.out.print("**");
 			}
 			System.out.println();
 		}
