@@ -7,6 +7,12 @@ public class Box {
 	private boolean isEmpty;
 	private String contentBox;
 	
+	/**
+	 * Constructor.
+	 * @param indexLine
+	 * @param indexColumn
+	 * @param isEmpty
+	 */
 	public Box(int indexLine, int indexColumn, boolean isEmpty) {
 		this.indexLine = indexLine;
 		this.indexColumn = indexColumn;
@@ -14,6 +20,12 @@ public class Box {
 		this.contentBox = " ";
 	}
 
+	public int getIndexLine() {
+		return indexLine;
+	}
+	public int getIndexColumn() {
+		return indexColumn;
+	}
 	public boolean getIsEmpty() {
 		return isEmpty;
 	}
