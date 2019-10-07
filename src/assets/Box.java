@@ -23,8 +23,14 @@ public class Box {
 	public int getIndexLine() {
 		return indexLine;
 	}
+	public void setIndexLine(int indexLine) {
+		this.indexLine = indexLine;
+	}
 	public int getIndexColumn() {
 		return indexColumn;
+	}
+	public void setIndexColumn(int indexColumn) {
+		this.indexColumn = indexColumn;
 	}
 	public boolean getIsEmpty() {
 		return isEmpty;
