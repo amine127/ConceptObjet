@@ -1,0 +1,29 @@
+package assets;
+
+public class Box {
+
+	private int indexLine;
+	private int indexColumn;
+	private boolean isEmpty;
+	private String contentBox;
+	
+	public Box(int indexLine, int indexColumn, boolean isEmpty) {
+		this.indexLine = indexLine;
+		this.indexColumn = indexColumn;
+		this.isEmpty = isEmpty;
+		this.contentBox = " ";
+	}
+
+	public boolean getIsEmpty() {
+		return isEmpty;
+	}
+	public void setIsEmpty(boolean isEmpty) {
+		this.isEmpty = isEmpty;
+	}
+	public String getContentBox() {
+		return contentBox;
+	}
+	public void setContentBox(String contentBox) {
+		this.contentBox = contentBox;
+	}
+}

@@ -1,33 +1,66 @@
 package assets;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Map {
-	private int lengthMap;
-	private int widthMap;
+	private int nbrLine;
+	private int nbrColumn;
+	private ArrayList<Box> listBox = new ArrayList<Box>();
 	
-	public Map(int length, int width) {
-		this.lengthMap = length;
-		this.widthMap = width;
-		
+	public Map(int nbrLine, int nbrColumn) {
+		this.nbrLine = nbrLine;
+		this.nbrColumn = nbrColumn;
+		this.createBoxes();
+		this.generateObstacle();
 	}
 	
-	@Override
-	public String toString() {
-		return printMap();
+	public ArrayList<Box> getListBox() {
+		return listBox;
 	}
 	
-	// faire avec des listes par soucis d'accessibilité
-	public String printMap() {
-		String mapDisplay = "";
-		
-		for (int i = 0; i < this.lengthMap; i++) {
-			for (int j = 0; j < this.widthMap; j++) {
-				if (j == 0) {
-					mapDisplay += "|";
-				}
-				mapDisplay += "o|";
+	public void displayMap() {
+		for (int i = 0; i < nbrLine; i++) {
+			
+			for (int k = 0; k < nbrColumn; k++) { System.out.print(" --- "); }
+			System.out.println();
+			for (int j = 0; j < nbrColumn; j++) {
+				System.out.print("| " + this.listBox.get((i*10)+j).getContentBox() + " |");
 			}
-			mapDisplay += "\n____________________" + "\n";
+			System.out.println();
 		}
-		return mapDisplay;
+		for (int k = 0; k < nbrColumn; k++) { System.out.print(" --- "); }
 	}
+	
+	public void createBoxes() {
+		for (int i = 0; i < nbrLine; i++) {
+			for (int j = 0; j < nbrColumn; j++) {
+				listBox.add(new Box(i, j, true));
+			}
+		}
+	}
+	
+	public void generateObstacle() {
+		Random randomGenerator = new Random();
+		
+		for (int i = 0; i < 10; i++) {
+			boolean done = false;
+			int currentIndex = randomGenerator.nextInt((nbrLine * nbrColumn) - 1);
+			if (listBox.get(currentIndex).getIsEmpty()) {
+				listBox.get(currentIndex).setContentBox("A");
+				listBox.get(currentIndex).setIsEmpty(false);
+			}
+			else {
+				while (!done) {
+					currentIndex = randomGenerator.nextInt((nbrLine * nbrColumn) - 1);
+					if (listBox.get(currentIndex).getIsEmpty()) {
+						listBox.get(currentIndex).setContentBox("A");
+						listBox.get(currentIndex).setIsEmpty(false);
+						done = true;
+					}
+				}
+			}
+		}
+	}
+	
 }
