@@ -40,7 +40,13 @@ public class Map {
 	public ArrayList<ArrayList<Box>> getListBox() {
 		return listBox;
 	}
-	
+	public int getNbrLine() {
+		return nbrLine;
+	}
+	public int getNbrColumn() {
+		return nbrColumn;
+	}
+
 	/**
 	 * Displays the Map object following a special design.
 	 */
@@ -133,4 +139,84 @@ public class Map {
 		}
 	}
 	
+	//Méthode pas très opti étant donné qu'il y a une suite de X if/else
+	public ArrayList<Box> surroundings(Box box) {
+		ArrayList<Box> surroundings = new ArrayList<Box>();
+		boolean firstLine = false, firstColumn = false, lastLine = false, lastColumn = false;
+		if (box.getIndexLine() == 0) {
+			firstLine = true;
+		}
+		if (box.getIndexLine() == nbrLine - 1) {
+			lastLine = true;
+		}
+		if (box.getIndexColumn() == 0) {
+			firstColumn = true;
+		}
+		if (box.getIndexColumn() == nbrColumn - 1) {
+			lastColumn = true;
+		}
+		
+		if (firstLine) {
+			if (firstLine && firstColumn) {
+				System.out.println("1 & 1");
+				surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() + 1));
+				surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn()));
+				surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() + 1));
+			}
+			else {
+				if (firstLine && lastColumn) {
+					System.out.println("1 & der");
+					surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() - 1));
+					surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() - 1));
+					surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn()));
+				}
+				else {
+					System.out.println("1 & ?");
+					surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() + 1));
+					surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn()));
+					surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() + 1));
+					surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() - 1));
+					surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() - 1));
+				}
+			}
+		}
+		else {
+			if (lastLine) {
+				if (lastLine && firstColumn) {
+					System.out.println("der & 1");
+					surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn()));
+					surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() + 1));
+					surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() + 1));
+				}
+				else {
+					if (lastLine && lastColumn) {
+						System.out.println("der & der");
+						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() - 1));
+						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn()));
+						surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() - 1));
+					}
+					else {
+						System.out.println("der & ?");
+						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() - 1));
+						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn()));
+						surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() - 1));
+						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() + 1));
+						surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() + 1));
+					}
+				}
+			}
+			else { //faire la même chose avec la condition sur le n° de colonne dans les premiers if
+				System.out.println("? & ?");
+				surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() - 1));
+				surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn()));
+				surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() - 1));
+				surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() + 1));
+				surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() + 1));
+				surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() - 1));
+				surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn()));
+				surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() + 1));
+			}
+		}
+		return surroundings;
+	}
 }

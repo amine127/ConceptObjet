@@ -44,4 +44,9 @@ public class Box {
 	public void setContentBox(String contentBox) {
 		this.contentBox = contentBox;
 	}
+
+	@Override
+	public String toString() {
+		return "Box[" + indexLine + ", " + indexColumn + "]";
+	}
 }
