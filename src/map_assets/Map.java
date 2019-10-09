@@ -1,4 +1,4 @@
-package assets;
+package map_assets;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -56,12 +56,7 @@ public class Map {
 			for (int k = 0; k < nbrColumn; k++) { System.out.print(" --- "); }
 			System.out.println();
 			for (int j = 0; j < nbrColumn; j++) {
-				if (listBox.get(i).get(j).getContentBox().equals("A")) {
-					System.out.print("| " + listBox.get(i).get(j).getContentBox() + " |");
-				}
-				else {
-					System.out.print("| " + listBox.get(i).get(j).getContentBox() + " |");
-				}
+				System.out.print("| " + listBox.get(i).get(j).getContentBox().getTag() + " |");
 			}
 			System.out.println();
 		}
@@ -76,7 +71,7 @@ public class Map {
 		for (int i = 0; i < nbrLine; i++) {
 			listBox.add(new ArrayList<Box>());
 			for (int j = 0; j < nbrColumn; j++) {
-				listBox.get(i).add(new Box(i, j ,true));
+				listBox.get(i).add(new Box(i, j));
 			}
 		}
 	}
@@ -94,7 +89,7 @@ public class Map {
 			int currentColumn = randomGenerator.nextInt(nbrColumn - 1);
 			if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
 				listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
-				listBox.get(currentLine).get(currentColumn).setContentBox("A");
+				listBox.get(currentLine).get(currentColumn).setContentBox(new Tree());
 			}
 			else {
 				while (!done) {
@@ -102,7 +97,7 @@ public class Map {
 					currentColumn = randomGenerator.nextInt(nbrColumn - 1);
 					if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
 						listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
-						listBox.get(currentLine).get(currentColumn).setContentBox("A");
+						listBox.get(currentLine).get(currentColumn).setContentBox(new Tree());
 						done = true;
 					}
 				}
@@ -110,6 +105,17 @@ public class Map {
 			}
 		}
 	}
+	
+	/*
+	public void generateCreatures() {
+		Random randomGenerator = new Random();
+		
+		for (int i = 0; i < 4; i++) {
+			int currentLine = randomGenerator.nextInt(nbrLine - 1);
+			int currentColumn = randomGenerator.nextInt(nbrColumn - 1);
+		}
+	}
+	*/
 	
 	/**
 	 * Defines which Box(es) compose different safe zone.
@@ -240,4 +246,5 @@ public class Map {
 		}
 		return surroundings;
 	}
+	
 }
