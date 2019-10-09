@@ -1,5 +1,6 @@
 package assets;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -56,7 +57,12 @@ public class Map {
 			for (int k = 0; k < nbrColumn; k++) { System.out.print(" --- "); }
 			System.out.println();
 			for (int j = 0; j < nbrColumn; j++) {
-				System.out.print("| " + this.listBox.get(i).get(j).getContentBox() + " |");
+				if (listBox.get(i).get(j).getContentBox().equals("A")) {
+					System.out.print("| " + listBox.get(i).get(j).getContentBox() + " |");
+				}
+				else {
+					System.out.print("| " + listBox.get(i).get(j).getContentBox() + " |");
+				}
 			}
 			System.out.println();
 		}
@@ -101,6 +107,7 @@ public class Map {
 						done = true;
 					}
 				}
+				done = false;
 			}
 		}
 	}
@@ -138,8 +145,12 @@ public class Map {
 			safeZoneElve.add(listBox.get(nbrLine -1).get(1));
 		}
 	}
-	
-	//Méthode pas très opti étant donné qu'il y a une suite de X if/else
+
+	/**
+	 * Method to give each boxes around the given box. //Not optimized (X if/else)
+	 * @param box
+	 * @return Returns an ArrayList containing each adjacent box.
+	 */
 	public ArrayList<Box> surroundings(Box box) {
 		ArrayList<Box> surroundings = new ArrayList<Box>();
 		boolean firstLine = false, firstColumn = false, lastLine = false, lastColumn = false;
@@ -157,21 +168,18 @@ public class Map {
 		}
 		
 		if (firstLine) {
-			if (firstLine && firstColumn) {
-				System.out.println("1 & 1");
+			if (firstColumn) {
 				surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() + 1));
 				surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn()));
 				surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() + 1));
 			}
 			else {
-				if (firstLine && lastColumn) {
-					System.out.println("1 & der");
+				if (lastColumn) {
 					surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() - 1));
 					surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() - 1));
 					surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn()));
 				}
 				else {
-					System.out.println("1 & ?");
 					surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() + 1));
 					surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn()));
 					surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() + 1));
@@ -182,21 +190,18 @@ public class Map {
 		}
 		else {
 			if (lastLine) {
-				if (lastLine && firstColumn) {
-					System.out.println("der & 1");
+				if (firstColumn) {
 					surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn()));
 					surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() + 1));
 					surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() + 1));
 				}
 				else {
-					if (lastLine && lastColumn) {
-						System.out.println("der & der");
+					if (lastColumn) {
 						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() - 1));
 						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn()));
 						surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() - 1));
 					}
 					else {
-						System.out.println("der & ?");
 						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() - 1));
 						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn()));
 						surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() - 1));
@@ -205,16 +210,33 @@ public class Map {
 					}
 				}
 			}
-			else { //faire la même chose avec la condition sur le n° de colonne dans les premiers if
-				System.out.println("? & ?");
-				surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() - 1));
-				surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn()));
-				surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() - 1));
-				surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() + 1));
-				surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() + 1));
-				surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() - 1));
-				surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn()));
-				surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() + 1));
+			else {
+				if (firstColumn) {
+					surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn()));
+					surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() + 1));
+					surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() + 1));
+					surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn()));
+					surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() + 1));
+				}
+				else {
+					if (lastColumn) {
+						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() - 1));
+						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn()));
+						surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() - 1));
+						surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() - 1));
+						surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn()));
+					}
+					else {
+						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() - 1));
+						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn()));
+						surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() - 1));
+						surroundings.add(listBox.get(box.getIndexLine() - 1).get(box.getIndexColumn() + 1));
+						surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() + 1));
+						surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() - 1));
+						surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn()));
+						surroundings.add(listBox.get(box.getIndexLine() + 1).get(box.getIndexColumn() + 1));
+					}
+				}
 			}
 		}
 		return surroundings;

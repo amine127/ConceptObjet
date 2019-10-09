@@ -15,9 +15,5 @@ public class MainApp {
 		int rdmIndex1 = randomGenerator.nextInt(testMap.getNbrLine()), rdmIndex2 = randomGenerator.nextInt(testMap.getNbrColumn());
 		System.out.println(testMap.getListBox().get(rdmIndex1).get(rdmIndex2));
 		System.out.println("Surroundings : " + testMap.surroundings(testMap.getListBox().get(rdmIndex1).get(rdmIndex2)));
-		
-		System.out.println(testMap.getListBox().get(4).get(0));
-		System.out.println("Surroundings : " + testMap.surroundings(testMap.getListBox().get(4).get(0)));
 	}
-
 }
