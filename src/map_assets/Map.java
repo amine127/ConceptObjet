@@ -3,7 +3,12 @@ package map_assets;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Map {
+import character_assets.Elve;
+import character_assets.Goblin;
+import character_assets.Human;
+import character_assets.Orc;
+
+public final class Map {
 	private int nbrLine;
 	private int nbrColumn;
 	private ArrayList<Box> safeZoneOrc = new ArrayList<Box>();
@@ -12,17 +17,20 @@ public class Map {
 	private ArrayList<Box> safeZoneElve = new ArrayList<Box>();
 	private ArrayList<ArrayList<Box>> listBox = new ArrayList<ArrayList<Box>>();
 	
+	private static volatile Map instance = null;
+	
 	/**
 	 * Constructor.
 	 * @param nbrLine
 	 * @param nbrColumn
 	 */
-	public Map(int nbrLine, int nbrColumn) {
+	private Map(int nbrLine, int nbrColumn) {
 		this.nbrLine = nbrLine;
 		this.nbrColumn = nbrColumn;
 		this.createBoxes();
 		this.defineSafeZone();
 		this.generateObstacle();
+		this.generateCreatures();
 	}
 	
 	public ArrayList<Box> getSafeZoneOrc() {
@@ -47,6 +55,13 @@ public class Map {
 		return nbrColumn;
 	}
 
+	public final static Map getInstance() {
+		if (Map.instance == null) {
+			Map.instance = new Map(10, 10);
+		}
+		return instance;
+	}
+	
 	/**
 	 * Displays the Map object following a special design.
 	 */
@@ -106,16 +121,42 @@ public class Map {
 		}
 	}
 	
-	/*
+	
 	public void generateCreatures() {
 		Random randomGenerator = new Random();
 		
 		for (int i = 0; i < 4; i++) {
 			int currentLine = randomGenerator.nextInt(nbrLine - 1);
 			int currentColumn = randomGenerator.nextInt(nbrColumn - 1);
+			switch (i) {
+			case 0:
+				if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
+					listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
+					listBox.get(currentLine).get(currentColumn).setContentBox(new Orc());
+				}
+				break;
+			case 1:
+				if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
+					listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
+					listBox.get(currentLine).get(currentColumn).setContentBox(new Goblin());
+				}
+				break;
+			case 2:
+				if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
+					listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
+					listBox.get(currentLine).get(currentColumn).setContentBox(new Elve());
+				}
+				break;
+			case 3:
+				if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
+					listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
+					listBox.get(currentLine).get(currentColumn).setContentBox(new Human());
+				}
+				break;
+			}
 		}
 	}
-	*/
+
 	
 	/**
 	 * Defines which Box(es) compose different safe zone.

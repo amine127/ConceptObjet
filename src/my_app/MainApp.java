@@ -7,8 +7,7 @@ import map_assets.Map;
 public class MainApp {
 
 	public static void main(String[] args) {
-		Map testMap = new Map(6, 6);
-		testMap.displayMap();
+		Map.getInstance().displayMap();
 		System.out.println();
 		
 		/*TEST SURROUNDINGS*/
