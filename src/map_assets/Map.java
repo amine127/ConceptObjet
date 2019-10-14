@@ -32,6 +32,13 @@ public final class Map {
 		this.generateObstacle();
 		this.generateCreatures();
 	}
+	//Design pattern singleton
+	public final static Map getInstance() {
+		if (Map.instance == null) {
+			Map.instance = new Map(10, 10);
+		}
+		return instance;
+	}
 	
 	public ArrayList<Box> getSafeZoneOrc() {
 		return safeZoneOrc;
@@ -54,13 +61,7 @@ public final class Map {
 	public int getNbrColumn() {
 		return nbrColumn;
 	}
-
-	public final static Map getInstance() {
-		if (Map.instance == null) {
-			Map.instance = new Map(10, 10);
-		}
-		return instance;
-	}
+	
 	
 	/**
 	 * Displays the Map object following a special design.
@@ -79,6 +80,7 @@ public final class Map {
 		System.out.println();
 	}
 	
+	
 	/**
 	 * Creates ArrayLists, then fills them with Boxes.
 	 */
@@ -90,6 +92,7 @@ public final class Map {
 			}
 		}
 	}
+	
 	
 	/**
 	 * Generates obstacles in random Boxes from the Map.
@@ -122,6 +125,9 @@ public final class Map {
 	}
 	
 	
+	/**
+	 * 
+	 */
 	public void generateCreatures() {
 		Random randomGenerator = new Random();
 		
@@ -191,6 +197,7 @@ public final class Map {
 			safeZoneElve.add(listBox.get(nbrLine -1).get(1));
 		}
 	}
+	
 
 	/**
 	 * Method to give each boxes around the given box. //Not optimized (X if/else)
