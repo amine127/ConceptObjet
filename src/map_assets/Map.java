@@ -126,39 +126,96 @@ public final class Map {
 	
 	
 	/**
-	 * 
+	 * Generates creatures in random Boxes from the Map.
+	 * The number of generated creatures depends on the size of the map and it makes sure to
+	 * generate the same amount of creature for each race.
 	 */
 	public void generateCreatures() {
 		Random randomGenerator = new Random();
+		int var = (nbrColumn*nbrLine / 16) - ((nbrColumn*nbrLine / 16)%4);
 		
-		for (int i = 0; i < 4; i++) {
-			int currentLine = randomGenerator.nextInt(nbrLine - 1);
-			int currentColumn = randomGenerator.nextInt(nbrColumn - 1);
-			switch (i) {
+		for (int i = 1; i <= var; i++) {
+			switch (i % 4) {
 			case 0:
-				if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
-					listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
-					listBox.get(currentLine).get(currentColumn).setContentBox(new Orc());
-				}
-				break;
-			case 1:
-				if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
-					listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
-					listBox.get(currentLine).get(currentColumn).setContentBox(new Goblin());
-				}
-				break;
-			case 2:
-				if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
-					listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
-					listBox.get(currentLine).get(currentColumn).setContentBox(new Elve());
-				}
-				break;
-			case 3:
+				boolean done = false;
+				int currentLine = randomGenerator.nextInt(nbrLine - 1);
+				int currentColumn = randomGenerator.nextInt(nbrColumn - 1);
 				if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
 					listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
 					listBox.get(currentLine).get(currentColumn).setContentBox(new Human());
 				}
-				break;
+				else {
+					while (!done) {
+						currentLine = randomGenerator.nextInt(nbrLine - 1);
+						currentColumn = randomGenerator.nextInt(nbrColumn - 1);
+						if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
+							listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
+							listBox.get(currentLine).get(currentColumn).setContentBox(new Human());
+							done = true;
+						}
+					}
+					done = false;
+				}break;
+			case 1:
+				boolean done1 = false;
+				int currentLine1 = randomGenerator.nextInt(nbrLine - 1);
+				int currentColumn1 = randomGenerator.nextInt(nbrColumn - 1);
+				if (listBox.get(currentLine1).get(currentColumn1).getIsEmpty()) {
+					listBox.get(currentLine1).get(currentColumn1).setIsEmpty(false);
+					listBox.get(currentLine1).get(currentColumn1).setContentBox(new Elve());
+				}
+				else {
+					while (!done1) {
+						currentLine1 = randomGenerator.nextInt(nbrLine - 1);
+						currentColumn1 = randomGenerator.nextInt(nbrColumn - 1);
+						if (listBox.get(currentLine1).get(currentColumn1).getIsEmpty()) {
+							listBox.get(currentLine1).get(currentColumn1).setIsEmpty(false);
+							listBox.get(currentLine1).get(currentColumn1).setContentBox(new Elve());
+							done1 = true;
+						}
+					}
+					done1 = false;
+				}break;
+			case 2:
+				boolean done2 = false;
+				int currentLine2 = randomGenerator.nextInt(nbrLine - 1);
+				int currentColumn2 = randomGenerator.nextInt(nbrColumn - 1);
+				if (listBox.get(currentLine2).get(currentColumn2).getIsEmpty()) {
+					listBox.get(currentLine2).get(currentColumn2).setIsEmpty(false);
+					listBox.get(currentLine2).get(currentColumn2).setContentBox(new Orc());
+				}
+				else {
+					while (!done2) {
+						currentLine2 = randomGenerator.nextInt(nbrLine - 1);
+						currentColumn2 = randomGenerator.nextInt(nbrColumn - 1);
+						if (listBox.get(currentLine2).get(currentColumn2).getIsEmpty()) {
+							listBox.get(currentLine2).get(currentColumn2).setIsEmpty(false);
+							listBox.get(currentLine2).get(currentColumn2).setContentBox(new Orc());
+							done2 = true;
+						}
+					}
+					done2 = false;
+				}break;
+			case 3:
+				boolean done3 = false;
+				int currentLine3 = randomGenerator.nextInt(nbrLine - 1);
+				int currentColumn3 = randomGenerator.nextInt(nbrColumn - 1);
+				if (listBox.get(currentLine3).get(currentColumn3).getIsEmpty()) {
+					listBox.get(currentLine3).get(currentColumn3).setIsEmpty(false);
+					listBox.get(currentLine3).get(currentColumn3).setContentBox(new Goblin());
+				}
+				else {
+					while (!done3) {
+						currentLine3 = randomGenerator.nextInt(nbrLine - 1);
+						currentColumn3 = randomGenerator.nextInt(nbrColumn - 1);
+						if (listBox.get(currentLine3).get(currentColumn3).getIsEmpty()) {
+							listBox.get(currentLine3).get(currentColumn3).setIsEmpty(false);
+							listBox.get(currentLine3).get(currentColumn3).setContentBox(new Goblin());
+							done3 = true;
+						}
+					}
+					done3 = false;
+				}break;
 			}
 		}
 	}

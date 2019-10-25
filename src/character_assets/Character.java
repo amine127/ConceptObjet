@@ -1,5 +1,7 @@
 package character_assets;
 
+import java.util.Random;
+
 import map_assets.Entity;
 
 public abstract class Character extends Entity{
@@ -48,4 +50,21 @@ public abstract class Character extends Entity{
 	}
 
 	public abstract void move();
+	
+	public String selectRandomMove() {
+		Random randomGenerator = new Random();
+		int pick = randomGenerator.nextInt(3);;
+		switch (pick) {
+		case 0:
+			return "fou";
+		case 1:
+			return "tour";
+		case 2:
+			return "dame";
+		case 3:
+			return "roi";
+		default:
+			return "";
+		}
+	}
 }
