@@ -5,22 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
 
+import character_assets.Human;
 import map_assets.Map;
 
 public class MainApp {
 
 	public static void main(String[] args) throws IOException {
 		
-		while (true) {	
-			Map.getInstance().displayMap();
-			System.out.println();
+		while (Map.getInstance().getListCharacter().size() > 1) {	
 			
-			/*TEST SURROUNDINGS*/
-			//Random randomGenerator = new Random();
-			//int rdmIndex1 = randomGenerator.nextInt(Map.getInstance().getNbrLine()), rdmIndex2 = randomGenerator.nextInt(Map.getInstance().getNbrColumn());
-			//System.out.println(Map.getInstance().getListBox().get(rdmIndex1).get(rdmIndex2));
-			//System.out.println("Surroundings : " + Map.getInstance().surroundings(Map.getInstance().getListBox().get(rdmIndex1).get(rdmIndex2)));
-			/*TEST SURROUNDINGS*/
+			Map.getInstance().newStep();
 			
 			/*BufferedReader to select to display next step of the simulation or leave.*/
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -28,6 +22,7 @@ public class MainApp {
 			while (line.equalsIgnoreCase("q") == false) {
 				System.out.println("Press Enter for next step or type \"q\" to quit.");
 			    line = in.readLine();
+			    Map.getInstance().newStep();
 			}
 			if (line.equalsIgnoreCase("q")) {
 				in.close();
@@ -36,5 +31,6 @@ public class MainApp {
 			}
 		    /*End BufferedReader*/
 		}
+		System.out.println("The simulation is over and " + Map.getInstance().getListCharacter().get(0).getContentBox().getClass() + " won the war.");
 	}
 }

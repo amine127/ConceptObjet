@@ -16,6 +16,7 @@ public final class Map {
 	private ArrayList<Box> safeZoneHuman = new ArrayList<Box>();
 	private ArrayList<Box> safeZoneElve = new ArrayList<Box>();
 	private ArrayList<ArrayList<Box>> listBox = new ArrayList<ArrayList<Box>>();
+	private ArrayList<Box> listCharacter = new ArrayList<Box>();
 	
 	private static volatile Map instance = null;
 	
@@ -31,6 +32,7 @@ public final class Map {
 		this.defineSafeZone();
 		this.generateObstacle();
 		this.generateCreatures();
+		this.fillListCharacter();
 	}
 	//Design pattern singleton
 	public final static Map getInstance() {
@@ -54,6 +56,9 @@ public final class Map {
 	}
 	public ArrayList<ArrayList<Box>> getListBox() {
 		return listBox;
+	}
+	public ArrayList<Box> getListCharacter() {
+		return listCharacter;
 	}
 	public int getNbrLine() {
 		return nbrLine;
@@ -350,6 +355,29 @@ public final class Map {
 			}
 		}
 		return surroundings;
+	}
+	
+	/**
+	 * Method to fill the ArrayList containing each alive Character.
+	 */
+	public void fillListCharacter() {
+		for (int i = 0; i < nbrLine; i++) {
+			for (int j = 0; j < nbrColumn; j++) {
+				if (listBox.get(i).get(j).getContentBox().getTag().equals("H") || listBox.get(i).get(j).getContentBox().getTag().equals("E") || listBox.get(i).get(j).getContentBox().getTag().equals("O") || listBox.get(i).get(j).getContentBox().getTag().equals("G")) {
+					listCharacter.add(listBox.get(i).get(j));
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Method which needs to be called each iteration of the simulation.
+	 * It displays the Map, says the position of each alive Character...
+	 */
+	public void newStep() {
+		Map.getInstance().displayMap();
+		System.out.println();
+		System.out.println("Alive Characters : " + Map.getInstance().getListCharacter());
 	}
 	
 }
