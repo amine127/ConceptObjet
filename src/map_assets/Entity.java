@@ -3,16 +3,12 @@ package map_assets;
 public class Entity extends CharacterAccess {
 
 	protected String tag = " ";
-	protected boolean isGood;
 
 	public String getTag() {
 		return tag;
 	}
 	public void setTag(String tag) {
 		this.tag = tag;
-	}
-	public boolean getIsGood() {
-		return isGood;
 	}
 	
 	@Override
@@ -40,5 +36,10 @@ public class Entity extends CharacterAccess {
 	@Override
 	public void setPV(int pV) {}
 	@Override
-	public void fight(Character enemy) {}
+	public boolean getIsGood() {
+		return false;
+	}
+	@Override
+	public boolean fight(Entity enemy) {
+		return false;}
 }

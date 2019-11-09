@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class Goblin extends Bad{
 
-	public Goblin() {
-		super();
+	public Goblin(String name) {
+		super(name);
 		this.tag = "G";
 	}
 }

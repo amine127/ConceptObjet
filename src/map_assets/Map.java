@@ -11,10 +11,8 @@ import character_assets.Orc;
 public final class Map {
 	private int nbrLine;
 	private int nbrColumn;
-	private ArrayList<Box> safeZoneOrc = new ArrayList<Box>();
-	private ArrayList<Box> safeZoneGoblin = new ArrayList<Box>();
-	private ArrayList<Box> safeZoneHuman = new ArrayList<Box>();
-	private ArrayList<Box> safeZoneElve = new ArrayList<Box>();
+	private ArrayList<Box> safeZoneGood = new ArrayList<Box>();
+	private ArrayList<Box> safeZoneBad = new ArrayList<Box>();
 	private ArrayList<ArrayList<Box>> listBox = new ArrayList<ArrayList<Box>>();
 	private ArrayList<Box> listCharacter = new ArrayList<Box>();
 	
@@ -42,17 +40,11 @@ public final class Map {
 		return instance;
 	}
 	
-	public ArrayList<Box> getSafeZoneOrc() {
-		return safeZoneOrc;
+	public ArrayList<Box> getSafeZoneGood() {
+		return safeZoneGood;
 	}
-	public ArrayList<Box> getSafeZoneGoblin() {
-		return safeZoneGoblin;
-	}
-	public ArrayList<Box> getSafeZoneHuman() {
-		return safeZoneHuman;
-	}
-	public ArrayList<Box> getSafeZoneElve() {
-		return safeZoneElve;
+	public ArrayList<Box> getSafeZoneBad() {
+		return safeZoneBad;
 	}
 	public ArrayList<ArrayList<Box>> getListBox() {
 		return listBox;
@@ -147,7 +139,7 @@ public final class Map {
 				int currentColumn = randomGenerator.nextInt(nbrColumn - 1);
 				if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
 					listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
-					listBox.get(currentLine).get(currentColumn).setContentBox(new Human());
+					listBox.get(currentLine).get(currentColumn).setContentBox(new Human("Human" + i));
 				}
 				else {
 					while (!done) {
@@ -155,7 +147,7 @@ public final class Map {
 						currentColumn = randomGenerator.nextInt(nbrColumn - 1);
 						if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
 							listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
-							listBox.get(currentLine).get(currentColumn).setContentBox(new Human());
+							listBox.get(currentLine).get(currentColumn).setContentBox(new Human("Human" + i));
 							done = true;
 						}
 					}
@@ -167,7 +159,7 @@ public final class Map {
 				int currentColumn1 = randomGenerator.nextInt(nbrColumn - 1);
 				if (listBox.get(currentLine1).get(currentColumn1).getIsEmpty()) {
 					listBox.get(currentLine1).get(currentColumn1).setIsEmpty(false);
-					listBox.get(currentLine1).get(currentColumn1).setContentBox(new Elve());
+					listBox.get(currentLine1).get(currentColumn1).setContentBox(new Elve("Elve" + i));
 				}
 				else {
 					while (!done1) {
@@ -175,7 +167,7 @@ public final class Map {
 						currentColumn1 = randomGenerator.nextInt(nbrColumn - 1);
 						if (listBox.get(currentLine1).get(currentColumn1).getIsEmpty()) {
 							listBox.get(currentLine1).get(currentColumn1).setIsEmpty(false);
-							listBox.get(currentLine1).get(currentColumn1).setContentBox(new Elve());
+							listBox.get(currentLine1).get(currentColumn1).setContentBox(new Elve("Elve" + i));
 							done1 = true;
 						}
 					}
@@ -187,7 +179,7 @@ public final class Map {
 				int currentColumn2 = randomGenerator.nextInt(nbrColumn - 1);
 				if (listBox.get(currentLine2).get(currentColumn2).getIsEmpty()) {
 					listBox.get(currentLine2).get(currentColumn2).setIsEmpty(false);
-					listBox.get(currentLine2).get(currentColumn2).setContentBox(new Orc());
+					listBox.get(currentLine2).get(currentColumn2).setContentBox(new Orc("Orc" + i));
 				}
 				else {
 					while (!done2) {
@@ -195,7 +187,7 @@ public final class Map {
 						currentColumn2 = randomGenerator.nextInt(nbrColumn - 1);
 						if (listBox.get(currentLine2).get(currentColumn2).getIsEmpty()) {
 							listBox.get(currentLine2).get(currentColumn2).setIsEmpty(false);
-							listBox.get(currentLine2).get(currentColumn2).setContentBox(new Orc());
+							listBox.get(currentLine2).get(currentColumn2).setContentBox(new Orc("Orc" + i));
 							done2 = true;
 						}
 					}
@@ -207,7 +199,7 @@ public final class Map {
 				int currentColumn3 = randomGenerator.nextInt(nbrColumn - 1);
 				if (listBox.get(currentLine3).get(currentColumn3).getIsEmpty()) {
 					listBox.get(currentLine3).get(currentColumn3).setIsEmpty(false);
-					listBox.get(currentLine3).get(currentColumn3).setContentBox(new Goblin());
+					listBox.get(currentLine3).get(currentColumn3).setContentBox(new Goblin("Goblin" + i));
 				}
 				else {
 					while (!done3) {
@@ -215,7 +207,7 @@ public final class Map {
 						currentColumn3 = randomGenerator.nextInt(nbrColumn - 1);
 						if (listBox.get(currentLine3).get(currentColumn3).getIsEmpty()) {
 							listBox.get(currentLine3).get(currentColumn3).setIsEmpty(false);
-							listBox.get(currentLine3).get(currentColumn3).setContentBox(new Goblin());
+							listBox.get(currentLine3).get(currentColumn3).setContentBox(new Goblin("Goblin" + i));
 							done3 = true;
 						}
 					}
@@ -230,33 +222,13 @@ public final class Map {
 	 * Defines which Box(es) compose different safe zone.
 	 */
 	public void defineSafeZone() {
-		
-		/* TODO Gérer levée d'exception si taille de la map trop petite */
-		
-		if (nbrLine * nbrColumn >= 36) {
-			/*Associating boxes with Orc's safezone - upper left 2x2 corner*/
-			safeZoneOrc.add(listBox.get(0).get(0));
-			safeZoneOrc.add(listBox.get(0).get(1));
-			safeZoneOrc.add(listBox.get(1).get(0));
-			safeZoneOrc.add(listBox.get(1).get(1));
-			
-			/*Associating boxes with Goblin's safezone - bottom right 2x2 corner*/
-			safeZoneGoblin.add(listBox.get(nbrLine -2).get(nbrColumn -2));
-			safeZoneGoblin.add(listBox.get(nbrLine -2).get(nbrColumn -1));
-			safeZoneGoblin.add(listBox.get(nbrLine -1).get(nbrColumn -2));
-			safeZoneGoblin.add(listBox.get(nbrLine -1).get(nbrColumn -1));
-			
-			/*Associating boxes with Human's safezone - upper right 2x2 corner*/
-			safeZoneHuman.add(listBox.get(0).get(nbrColumn - 2));
-			safeZoneHuman.add(listBox.get(0).get(nbrColumn - 1));
-			safeZoneHuman.add(listBox.get(1).get(nbrColumn - 2));
-			safeZoneHuman.add(listBox.get(1).get(nbrColumn - 1));
-			
-			/*Associating boxes with Elve's safezone - bottom left 2x2 corner*/
-			safeZoneElve.add(listBox.get(nbrLine -2).get(0));
-			safeZoneElve.add(listBox.get(nbrLine -2).get(1));
-			safeZoneElve.add(listBox.get(nbrLine -1).get(0));
-			safeZoneElve.add(listBox.get(nbrLine -1).get(1));
+		if (nbrLine * nbrColumn >= 4) {
+			for (int i = 0; i < nbrLine; i++) {
+				for (int j = 0; j < 2; j++) {
+					safeZoneGood.add(listBox.get(i).get(j));
+					safeZoneBad.add(listBox.get(i).get(nbrColumn - 1 - j));
+				}
+			}
 		}
 	}
 	
@@ -459,22 +431,40 @@ public final class Map {
 				count = nbrBoxMove;
 			}
 		}
+		System.out.println(box.getContentBox().getName() + " moves.");
+		Map.getInstance().displayMap();
 		
-		//pb si l'attaquant meurt et que la boucle for pas finie
 		for (Box b : surroundings(box)) {
-			if (!b.getIsEmpty() && !b.getContentBox().getTag().equals("T")) {
-				meet(box, b);
+			if (box.getContentBox().getPV() > 0) {
+				if (!b.getIsEmpty() && !b.getContentBox().getTag().equals("T")) {
+					meet(box, b);
+					Map.getInstance().displayMap();
+				}
 			}
 		}
 	}
 	
 	public void meet(Box box1, Box box2) {
+		/* Enemies case */
 		if (box1.getContentBox().getIsGood() != box2.getContentBox().getIsGood()) {
-			System.out.println(box2.getContentBox().getPV());
+			if (box1.getContentBox().fight(box2.getContentBox())) {
+				box1.getContentBox().setXP(box1.getContentBox().getXP() + box2.getContentBox().getXP());
+				box2.getContentBox().setPV(0);
+				box2.setIsEmpty(true);
+				box2.setContentBox(new Entity());
+			}
+			else {
+				box2.getContentBox().setXP(box2.getContentBox().getXP() + box1.getContentBox().getXP());
+				box1.getContentBox().setPV(0);
+				box1.setIsEmpty(true);
+				box1.setContentBox(new Entity());
+			}
 		}
+		/* Allies case */
 		else {
 			box1.getContentBox().setXP(box1.getContentBox().getXP() + 10);
 			box2.getContentBox().setXP(box2.getContentBox().getXP() + 10);
+			System.out.println(box1.getContentBox().getName() + " and " + box2.getContentBox().getName() + " met and shared 20 XP.");
 		}
 	}
 }

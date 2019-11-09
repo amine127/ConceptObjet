@@ -2,8 +2,8 @@ package character_assets;
 
 public class Elve extends Good{
 
-	public Elve() {
-		super();
+	public Elve(String name) {
+		super(name);
 		this.tag = "E";
 	}
 }

@@ -2,8 +2,8 @@ package character_assets;
 
 public class Human extends Good{
 
-	public Human() {
-		super();
+	public Human(String name) {
+		super(name);
 		this.tag = "H";
 	}
 }
