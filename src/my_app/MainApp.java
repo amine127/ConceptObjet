@@ -12,9 +12,10 @@ public class MainApp {
 
 	public static void main(String[] args) throws IOException {
 		
-		while (Map.getInstance().getListCharacter().size() > 1) {	
-			
-			Map.getInstance().newStep();
+		Map.getInstance().displayMap();
+		System.out.println("Alive Characters : " + Map.getInstance().getListCharacter());
+		
+		while (Map.getInstance().getListCharacter().size() > 1) {
 			
 			/*BufferedReader to select to display next step of the simulation or leave.*/
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));

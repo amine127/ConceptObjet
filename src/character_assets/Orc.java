@@ -6,8 +6,4 @@ public class Orc extends Bad{
 		super();
 		this.tag = "O";
 	}
-	
-	public void move() {
-		
-	}
 }

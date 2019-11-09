@@ -16,7 +16,6 @@ public class Box {
 		this.indexLine = indexLine;
 		this.indexColumn = indexColumn;
 		this.isEmpty = true;
-		this.contentBox.tag = " ";
 	}
 
 	public int getIndexLine() {

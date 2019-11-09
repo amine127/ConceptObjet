@@ -48,8 +48,6 @@ public abstract class Character extends Entity{
 	public void setLastDirection(String lastDirection) {
 		this.lastDirection = lastDirection;
 	}
-
-	public abstract void move();
 	
 	public String selectRandomMove() {
 		Random randomGenerator = new Random();
@@ -67,4 +65,6 @@ public abstract class Character extends Entity{
 			return "";
 		}
 	}
+	
+	
 }

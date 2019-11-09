@@ -8,12 +8,4 @@ public class Goblin extends Bad{
 		super();
 		this.tag = "G";
 	}
-	
-	public void move() {
-		String pick = this.selectRandomMove();
-		switch (pick) {
-		case "fou":
-			
-		}
-	}
 }

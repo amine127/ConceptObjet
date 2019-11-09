@@ -2,7 +2,7 @@ package map_assets;
 
 public class Entity {
 
-	protected String tag;
+	protected String tag = " ";
 
 	public String getTag() {
 		return tag;

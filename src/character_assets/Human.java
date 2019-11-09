@@ -6,8 +6,4 @@ public class Human extends Good{
 		super();
 		this.tag = "H";
 	}
-
-	public void move() {
-		
-	}
 }

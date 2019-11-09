@@ -6,9 +6,4 @@ public class Elve extends Good{
 		super();
 		this.tag = "E";
 	}
-
-	public void move() {
-		
-	}
-	
 }

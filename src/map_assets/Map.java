@@ -37,7 +37,7 @@ public final class Map {
 	//Design pattern singleton
 	public final static Map getInstance() {
 		if (Map.instance == null) {
-			Map.instance = new Map(10, 10);
+			Map.instance = new Map(8, 8);
 		}
 		return instance;
 	}
@@ -361,6 +361,7 @@ public final class Map {
 	 * Method to fill the ArrayList containing each alive Character.
 	 */
 	public void fillListCharacter() {
+		listCharacter.clear();
 		for (int i = 0; i < nbrLine; i++) {
 			for (int j = 0; j < nbrColumn; j++) {
 				if (listBox.get(i).get(j).getContentBox().getTag().equals("H") || listBox.get(i).get(j).getContentBox().getTag().equals("E") || listBox.get(i).get(j).getContentBox().getTag().equals("O") || listBox.get(i).get(j).getContentBox().getTag().equals("G")) {
@@ -377,7 +378,58 @@ public final class Map {
 	public void newStep() {
 		Map.getInstance().displayMap();
 		System.out.println();
+		
 		System.out.println("Alive Characters : " + Map.getInstance().getListCharacter());
+		for (Box b : listCharacter) {
+			move(b);
+		}
+		fillListCharacter();
 	}
 	
+	/**
+	 * Method to select a random number of case to move.
+	 * @return Returns a random int.
+	 */
+	public int selectRandomNbrCase() {
+		Random randomGenerator = new Random();
+		int nbrCase = randomGenerator.nextInt(Math.max(nbrColumn, nbrLine));
+		return nbrCase;	
+	}
+	
+	/**
+	 * 
+	 * @param box
+	 * @return
+	 */
+	public Box selectRandomDirection(Box box) {
+		Random randomGenerator = new Random();
+		
+		ArrayList<Box> possibleBox = new ArrayList<Box>();
+		for (Box b : surroundings(box)) {
+			if (b.getIsEmpty()) {
+				possibleBox.add(b);
+			}
+		}
+		if (!possibleBox.isEmpty()) {
+			int intDir = randomGenerator.nextInt(possibleBox.size());
+			
+			return possibleBox.get(intDir);
+		}
+		else {
+			return box;
+		}
+	}
+	
+	/**
+	 * Method that empties the actual box and fills the other one with the content of the first one.
+	 * @param box Box containing the Entity you want to move.
+	 */
+	public void move(Box box) {
+		Box newBox = selectRandomDirection(box);
+		newBox.setIsEmpty(false);
+		newBox.setContentBox(box.getContentBox());
+		
+		box.setIsEmpty(true);
+		box.setContentBox(new Entity());
+	}
 }
