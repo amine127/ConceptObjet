@@ -376,14 +376,19 @@ public final class Map {
 	 * It displays the Map, says the position of each alive Character...
 	 */
 	public void newStep() {
-		Map.getInstance().displayMap();
 		System.out.println();
-		
+		System.out.println("--------------- NEW STEP ---------------");
+		System.out.println();
 		System.out.println("Alive Characters : " + Map.getInstance().getListCharacter());
 		for (Box b : listCharacter) {
 			move(b);
 		}
 		fillListCharacter();
+		System.out.println("New alive Characters : " + Map.getInstance().getListCharacter());
+		Map.getInstance().displayMap();
+		System.out.println();
+		System.out.println("--------------- END STEP ---------------");
+		System.out.println();
 	}
 	
 	/**
@@ -392,13 +397,13 @@ public final class Map {
 	 */
 	public int selectRandomNbrCase() {
 		Random randomGenerator = new Random();
-		int nbrCase = randomGenerator.nextInt(Math.max(nbrColumn, nbrLine));
+		int nbrCase = randomGenerator.nextInt(Math.max(nbrColumn - 1, nbrLine - 1)) + 1;
 		return nbrCase;	
 	}
 	
 	/**
-	 * 
-	 * @param box
+	 * Method that returns a random Box (i.e. direction) from the surroundings of the Box in parameter.
+	 * @param box The Box from which you need to select a random direction.
 	 * @return
 	 */
 	public Box selectRandomDirection(Box box) {
@@ -425,11 +430,35 @@ public final class Map {
 	 * @param box Box containing the Entity you want to move.
 	 */
 	public void move(Box box) {
-		Box newBox = selectRandomDirection(box);
-		newBox.setIsEmpty(false);
-		newBox.setContentBox(box.getContentBox());
+		int nbrBoxMove = selectRandomNbrCase();
+		int count = 0;
 		
-		box.setIsEmpty(true);
-		box.setContentBox(new Entity());
+		Box newBox = selectRandomDirection(box);
+		
+		int deltaLine = newBox.getIndexLine() - box.getIndexLine();
+		int deltaColumn = newBox.getIndexColumn() - box.getIndexColumn();
+		
+		while (count < nbrBoxMove) {
+			if (newBox.getIsEmpty()) {
+				newBox.setIsEmpty(false);
+				newBox.setContentBox(box.getContentBox());
+				
+				box.setIsEmpty(true);
+				box.setContentBox(new Entity());
+				
+				box = newBox;
+				if ((box.getIndexLine() + deltaLine) >= 0 && (box.getIndexLine() + deltaLine) < nbrLine && (box.getIndexColumn() + deltaColumn) >= 0 && (box.getIndexColumn() + deltaColumn) < nbrColumn) {
+					newBox = listBox.get(box.getIndexLine() + deltaLine).get(box.getIndexColumn() + deltaColumn);
+					count++;
+				}
+				else {
+					count = nbrBoxMove;
+				}
+			}
+			else {
+				count = nbrBoxMove;
+			}
+		}
+		System.out.println(box);
 	}
 }

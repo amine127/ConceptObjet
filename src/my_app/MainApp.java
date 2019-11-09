@@ -13,7 +13,6 @@ public class MainApp {
 	public static void main(String[] args) throws IOException {
 		
 		Map.getInstance().displayMap();
-		System.out.println("Alive Characters : " + Map.getInstance().getListCharacter());
 		
 		while (Map.getInstance().getListCharacter().size() > 1) {
 			
