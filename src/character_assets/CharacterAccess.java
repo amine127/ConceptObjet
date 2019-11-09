@@ -1,4 +1,6 @@
-package map_assets;
+package character_assets;
+
+import map_assets.Entity;
 
 public abstract class CharacterAccess {
 	

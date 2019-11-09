@@ -1,5 +1,7 @@
 package map_assets;
 
+import character_assets.CharacterAccess;
+
 public class Entity extends CharacterAccess {
 
 	protected String tag = " ";
