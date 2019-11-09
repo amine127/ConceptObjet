@@ -6,5 +6,6 @@ public abstract class Bad extends Character{
 		super();
 		this.PE = 120;
 		this.PV = 100;
+		this.isGood = false;
 	}
 }

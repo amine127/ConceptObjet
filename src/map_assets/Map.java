@@ -459,6 +459,22 @@ public final class Map {
 				count = nbrBoxMove;
 			}
 		}
-		System.out.println(box);
+		
+		//pb si l'attaquant meurt et que la boucle for pas finie
+		for (Box b : surroundings(box)) {
+			if (!b.getIsEmpty() && !b.getContentBox().getTag().equals("T")) {
+				meet(box, b);
+			}
+		}
+	}
+	
+	public void meet(Box box1, Box box2) {
+		if (box1.getContentBox().getIsGood() != box2.getContentBox().getIsGood()) {
+			System.out.println(box2.getContentBox().getPV());
+		}
+		else {
+			box1.getContentBox().setXP(box1.getContentBox().getXP() + 10);
+			box2.getContentBox().setXP(box2.getContentBox().getXP() + 10);
+		}
 	}
 }
