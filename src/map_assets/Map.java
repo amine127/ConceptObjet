@@ -3,8 +3,10 @@ package map_assets;
 import java.util.ArrayList;
 import java.util.Random;
 
+import character_assets.Bad;
 import character_assets.Elve;
 import character_assets.Goblin;
+import character_assets.Good;
 import character_assets.Human;
 import character_assets.Orc;
 
@@ -353,9 +355,12 @@ public final class Map {
 		System.out.println();
 		System.out.println("Alive Characters : " + Map.getInstance().getListCharacter());
 		for (Box b : listCharacter) {
-			move(b);
+			if (b.getContentBox().getPE() > 0 && b.getContentBox().getPV() > 0) {
+				move(b);
+			}
 		}
 		fillListCharacter();
+		System.out.println("End of the step.");
 		System.out.println("New alive Characters : " + Map.getInstance().getListCharacter());
 		Map.getInstance().displayMap();
 		System.out.println();
@@ -367,7 +372,7 @@ public final class Map {
 	 * Method to select a random number of case to move.
 	 * @return Returns a random int.
 	 */
-	public int selectRandomNbrCase() {
+	public int selectRandomNumberBox() {
 		Random randomGenerator = new Random();
 		int nbrCase = randomGenerator.nextInt(Math.max(nbrColumn - 1, nbrLine - 1)) + 1;
 		return nbrCase;	
@@ -375,8 +380,9 @@ public final class Map {
 	
 	/**
 	 * Method that returns a random Box (i.e. direction) from the surroundings of the Box in parameter.
+	 * Selects all empty Boxes in the surroundings and then picks one randomly.
 	 * @param box The Box from which you need to select a random direction.
-	 * @return
+	 * @return Returns the random Box selected.
 	 */
 	public Box selectRandomDirection(Box box) {
 		Random randomGenerator = new Random();
@@ -399,41 +405,74 @@ public final class Map {
 	
 	/**
 	 * Method that empties the actual box and fills the other one with the content of the first one.
+	 * Also changes PV and PE according to the quantity of crossed Boxes (safe zone included).
 	 * @param box Box containing the Entity you want to move.
 	 */
 	public void move(Box box) {
-		int nbrBoxMove = selectRandomNbrCase();
-		int count = 0;
-		
+		/* Random movement selection */
+		int nbrBoxMove = selectRandomNumberBox();		
 		Box newBox = selectRandomDirection(box);
+		int count = 0;
+		/* Random movement selection */
 		
+		/* Keep direction in memory */
 		int deltaLine = newBox.getIndexLine() - box.getIndexLine();
 		int deltaColumn = newBox.getIndexColumn() - box.getIndexColumn();
+		/* Keep direction in memory */
 		
+		
+		
+		/* Movement */
+		System.out.println(box.getContentBox().getName() + " tries to move.");
 		while (count < nbrBoxMove) {
-			if (newBox.getIsEmpty()) {
+			if (newBox.getIsEmpty() && box.getContentBox().getPE() > 0) {
+				
+				// +1 PV by Box crossed
+				if (box.getContentBox().getIsGood()) {
+					box.getContentBox().setPV(Math.min(box.getContentBox().getPV() + 1, Good.maxPV));
+				}
+				else {
+					box.getContentBox().setPV(Math.min(box.getContentBox().getPV() + 1, Bad.maxPV));
+				}
+				// -1 PE by Box crossed
+				box.getContentBox().setPE(box.getContentBox().getPE() - 1);
+				
+				//filling new Box
 				newBox.setIsEmpty(false);
 				newBox.setContentBox(box.getContentBox());
-				
+				//emptying old Box
 				box.setIsEmpty(true);
 				box.setContentBox(new Entity());
 				
+				//changing "current" Box
 				box = newBox;
+				
+				//changing next Box if possible (out of bound Box or not)
 				if ((box.getIndexLine() + deltaLine) >= 0 && (box.getIndexLine() + deltaLine) < nbrLine && (box.getIndexColumn() + deltaColumn) >= 0 && (box.getIndexColumn() + deltaColumn) < nbrColumn) {
 					newBox = listBox.get(box.getIndexLine() + deltaLine).get(box.getIndexColumn() + deltaColumn);
 					count++;
 				}
+				//or end of movement
 				else {
+					System.out.println(box.getContentBox().getName() + " stopped moving because it has reached map limits.");
 					count = nbrBoxMove;
 				}
 			}
+			//case where Character's energy is empty before any movement or if there is an obstacle/enemy in the targeted Box.
 			else {
+				//Character loses energy depending on the amount of Boxes remaining after the obstacle/enemy
+				box.getContentBox().setPE(Math.max(0, box.getContentBox().getPE() - (nbrBoxMove - count + 1)));
 				count = nbrBoxMove;
+				System.out.println(box.getContentBox().getName() + " got stopped by an obstacle.");
 			}
 		}
-		System.out.println(box.getContentBox().getName() + " moves.");
 		Map.getInstance().displayMap();
+		System.out.println(box.getContentBox().getName() + " finished moving.");
+		/* Movement */
 		
+		
+		
+		/* Check surroundings for meetings */
 		for (Box b : surroundings(box)) {
 			if (box.getContentBox().getPV() > 0) {
 				if (!b.getIsEmpty() && !b.getContentBox().getTag().equals("T")) {
@@ -442,11 +481,20 @@ public final class Map {
 				}
 			}
 		}
+		/* Check surroundings for meetings */
 	}
 	
+	/**
+	 * Method that either starts a fight between 2 Characters or allows them to share PE and XP.
+	 * Depends if they are from the same faction or not.
+	 * @param box1 "attacking" Character
+	 * @param box2 other Character
+	 */
 	public void meet(Box box1, Box box2) {
 		/* Enemies case */
 		if (box1.getContentBox().getIsGood() != box2.getContentBox().getIsGood()) {
+			//we change the content of the Box of the loser with a new Entity
+			//winner gets the XP of the loser
 			if (box1.getContentBox().fight(box2.getContentBox())) {
 				box1.getContentBox().setXP(box1.getContentBox().getXP() + box2.getContentBox().getXP());
 				box2.getContentBox().setPV(0);
@@ -462,9 +510,28 @@ public final class Map {
 		}
 		/* Allies case */
 		else {
+			//they share 20 XP
 			box1.getContentBox().setXP(box1.getContentBox().getXP() + 10);
 			box2.getContentBox().setXP(box2.getContentBox().getXP() + 10);
-			System.out.println(box1.getContentBox().getName() + " and " + box2.getContentBox().getName() + " met and shared 20 XP.");
+			//they also share 2 PE
+			if (box1.getContentBox().getIsGood()) {
+				box1.getContentBox().setPE(Math.min(Good.maxPE, box1.getContentBox().getPE() + 1));
+				box2.getContentBox().setPE(Math.min(Good.maxPE, box2.getContentBox().getPE() + 1));
+			}
+			else {
+				box1.getContentBox().setPE(Math.min(Bad.maxPE, box1.getContentBox().getPE() + 1));
+				box2.getContentBox().setPE(Math.min(Bad.maxPE, box2.getContentBox().getPE() + 1));
+			}
+			System.out.println(box1.getContentBox().getName() + " and " + box2.getContentBox().getName() + " met and shared 20 XP and 2 PE.");
 		}
+	}
+	
+	/**
+	 * 
+	 * @param box
+	 * @return
+	 */
+	public boolean inSafezone(Box box) {
+		return true;
 	}
 }

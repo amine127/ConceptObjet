@@ -29,6 +29,9 @@ public abstract class Character extends Entity{
 	}
 	public void setPE(int pE) {
 		PE = pE;
+		if (PE < 0) {
+			PE = 0;
+		}
 	}
 	public int getXP() {
 		return XP;
@@ -41,6 +44,9 @@ public abstract class Character extends Entity{
 	}
 	public void setPV(int pV) {
 		PV = pV;
+		if (PV < 0) {
+			PV = 0;
+		}
 	}
 	public boolean getIsGood() {
 		return isGood;
