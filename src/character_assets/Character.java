@@ -52,14 +52,24 @@ public abstract class Character extends Entity{
 		return isGood;
 	}
 	
+	/**
+	 * Method that will randomly decide the issue of a fight between 2 Characters depending on their amount of XP.
+	 * @return Returns if the attacking Character won the fight or not.
+	 */
 	public boolean fight(Entity enemy) {
 		Random randomGenerator = new Random();
+		
+		/* Random value of attack depending on amount of XP */
 		int mySpell = randomGenerator.nextInt(9)*10 + XP;
 		int enemySpell = randomGenerator.nextInt(9)*10 + enemy.getXP();
+		/* Random value of attack depending on amount of XP */
+		
+		//case when they are the same
 		while (mySpell == enemySpell) {
 			mySpell = randomGenerator.nextInt(9)*10 + XP;
 			enemySpell = randomGenerator.nextInt(9)*10 + enemy.getXP();
 		}
+		//other cases
 		if (mySpell > enemySpell) {
 			System.out.println(this.name + " attacked " + enemy.getName() + " and succeeded. " + enemy.getName() + " died.");
 			return true;

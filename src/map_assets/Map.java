@@ -104,11 +104,14 @@ public final class Map {
 			boolean done = false;
 			int currentLine = randomGenerator.nextInt(nbrLine - 1);
 			int currentColumn = randomGenerator.nextInt(nbrColumn - 1);
+			
+			//check if Box is empty
 			if (listBox.get(currentLine).get(currentColumn).getIsEmpty()) {
 				listBox.get(currentLine).get(currentColumn).setIsEmpty(false);
 				listBox.get(currentLine).get(currentColumn).setContentBox(new Tree());
 			}
 			else {
+				//otherwise select a new Box until it is empty
 				while (!done) {
 					currentLine = randomGenerator.nextInt(nbrLine - 1);
 					currentColumn = randomGenerator.nextInt(nbrColumn - 1);
@@ -128,6 +131,7 @@ public final class Map {
 	 * Generates creatures in random Boxes from the Map.
 	 * The number of generated creatures depends on the size of the map and it makes sure to
 	 * generate the same amount of creature for each race.
+	 * THIS METHOD USES THE SAME MECHANISM AS THE generateObstacle()
 	 */
 	public void generateCreatures() {
 		Random randomGenerator = new Random();
@@ -221,7 +225,8 @@ public final class Map {
 
 	
 	/**
-	 * Defines which Box(es) compose different safe zone.
+	 * Defines which Boxes compose different safe zone.
+	 * The Good safe zone is on the left part of the Map and the Bad safe zone on the right part.
 	 */
 	public void defineSafeZone() {
 		if (nbrLine * nbrColumn >= 4) {
@@ -234,7 +239,7 @@ public final class Map {
 		}
 	}
 	
-
+	
 	/**
 	 * Method to give each boxes around the given box. //Not optimized (X if/else)
 	 * @param box
@@ -243,6 +248,8 @@ public final class Map {
 	public ArrayList<Box> surroundings(Box box) {
 		ArrayList<Box> surroundings = new ArrayList<Box>();
 		boolean firstLine = false, firstColumn = false, lastLine = false, lastColumn = false;
+		//these if statements allows checking if the Box is on the border of the Map
+		//it is needed because the surroundings are not defined the same way for Boxes on the border
 		if (box.getIndexLine() == 0) {
 			firstLine = true;
 		}
@@ -256,6 +263,7 @@ public final class Map {
 			lastColumn = true;
 		}
 		
+		//all these if statements goes through each case (not very optimized but it works)
 		if (firstLine) {
 			if (firstColumn) {
 				surroundings.add(listBox.get(box.getIndexLine()).get(box.getIndexColumn() + 1));
@@ -331,8 +339,10 @@ public final class Map {
 		return surroundings;
 	}
 	
+	
 	/**
 	 * Method to fill the ArrayList containing each alive Character.
+	 * It will be used to make actions successively with each Character on the Map such as moving or fighting.
 	 */
 	public void fillListCharacter() {
 		listCharacter.clear();
@@ -345,28 +355,29 @@ public final class Map {
 		}
 	}
 	
+	
 	/**
 	 * Method which needs to be called each iteration of the simulation.
-	 * It displays the Map, says the position of each alive Character...
+	 * It displays the Map and apply move() on each Character on the Map..
 	 */
 	public void newStep() {
 		System.out.println();
 		System.out.println("--------------- NEW STEP ---------------");
 		System.out.println();
-		System.out.println("Alive Characters : " + Map.getInstance().getListCharacter());
 		for (Box b : listCharacter) {
 			if (b.getContentBox().getPE() > 0 && b.getContentBox().getPV() > 0) {
 				move(b);
 			}
 		}
+		//fills the "new" list of Character without the dead ones.
 		fillListCharacter();
 		System.out.println("End of the step.");
-		System.out.println("New alive Characters : " + Map.getInstance().getListCharacter());
 		Map.getInstance().displayMap();
 		System.out.println();
 		System.out.println("--------------- END STEP ---------------");
 		System.out.println();
 	}
+	
 	
 	/**
 	 * Method to select a random number of case to move.
@@ -377,6 +388,7 @@ public final class Map {
 		int nbrCase = randomGenerator.nextInt(Math.max(nbrColumn - 1, nbrLine - 1)) + 1;
 		return nbrCase;	
 	}
+	
 	
 	/**
 	 * Method that returns a random Box (i.e. direction) from the surroundings of the Box in parameter.
@@ -402,6 +414,7 @@ public final class Map {
 			return box;
 		}
 	}
+	
 	
 	/**
 	 * Method that empties the actual box and fills the other one with the content of the first one.
@@ -436,6 +449,16 @@ public final class Map {
 				}
 				// -1 PE by Box crossed
 				box.getContentBox().setPE(box.getContentBox().getPE() - 1);
+				
+				// +4 PE by Box crossed in safe zone
+				if (inSafezone(box)) {
+					if (box.getContentBox().getIsGood()) {
+						box.getContentBox().setPE(Math.min(box.getContentBox().getPE() + 4, Good.maxPE));
+					}
+					else {
+						box.getContentBox().setPE(Math.min(box.getContentBox().getPE() + 4, Bad.maxPE));
+					}
+				}
 				
 				//filling new Box
 				newBox.setIsEmpty(false);
@@ -484,6 +507,7 @@ public final class Map {
 		/* Check surroundings for meetings */
 	}
 	
+	
 	/**
 	 * Method that either starts a fight between 2 Characters or allows them to share PE and XP.
 	 * Depends if they are from the same faction or not.
@@ -526,12 +550,23 @@ public final class Map {
 		}
 	}
 	
+	
 	/**
-	 * 
-	 * @param box
-	 * @return
+	 * Method that checks if a Character is in its safe zone or not.
+	 * @param box Box containing the Character
+	 * @return Returns a boolean corresponding to its position in safe zone or not.
 	 */
 	public boolean inSafezone(Box box) {
-		return true;
+		if (safeZoneGood.contains(box) && box.getContentBox().getIsGood()) {
+			return true;
+		}
+		else {
+			if (safeZoneBad.contains(box) && box.getContentBox().getIsGood()) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
 	}
 }
